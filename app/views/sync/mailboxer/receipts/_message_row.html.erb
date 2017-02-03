@@ -1,0 +1,29 @@
+<div class="media">
+  <% message = receipt.message %>
+  <div class="media-left">
+    <%= gravatar_for message.sender, 45, message.sender.email %>
+  </div>
+
+  <div class="media-body row">
+    <div class="col-sm-8">
+      <h6 class="media-heading"><%= message.sender.email %>
+        says at <%= message.created_at.strftime("%-d %B %Y, %H:%M:%S") %></h6>
+      <%= message.body %>
+    </div>
+    <div class="col-sm-2">
+      <%= message.get_likes.size %><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #245580"></span>
+      <%= message.get_dislikes.size %> <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #b92c28"></span>
+    </div>
+    <div class="col-sm-2">
+      <% if !current_user.voted_for? message %>
+          <%= link_to 'Up', up_message_path(message.id), {class: 'btn btn-primary'}%>
+          <%= link_to 'Down', down_message_path(message.id), {class: 'btn btn-danger'}%>
+      <% elsif current_user.voted_up_on? message %>
+          <%= link_to 'Down', down_message_path(message.id), {class: 'btn btn-danger'}%>
+      <% else %>
+          <%= link_to 'Up', up_message_path(message.id), {class: 'btn btn-primary'}%>
+      <% end %>
+    </div>
+  </div>
+
+</div>
